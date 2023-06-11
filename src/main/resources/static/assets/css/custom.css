@@ -1,0 +1,6 @@
+.preview-image {
+    width: 100px; /* Đặt chiều rộng mong muốn */
+    height: 100px; /* Chiều cao sẽ tự động co giãn theo tỷ lệ */
+    object-fit: cover; /* Kiểu co giãn: bảo đảm hình ảnh được điền vào phần tử */
+    margin: 5px; /* Khoảng cách giữa các hình ảnh */
+}
