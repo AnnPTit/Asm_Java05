@@ -51,16 +51,9 @@ public class Controller {
     public String getHome(Model model,
                           @RequestParam(name = "curent_page", defaultValue = "0") int curent_page,
                           @RequestParam(defaultValue = "6") int pageSize,
-                          HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Object user = request.getSession().getAttribute("idUser");
-        int numOfProductInCart = 0;
-        if (user == null) {
-            numOfProductInCart = gioHangService.countByTaiKhoan(3L);
-        } else {
-            numOfProductInCart = gioHangService.countByTaiKhoan(Long.valueOf(user.toString()));
-        }
-        session.setAttribute("numOfProductInCart", numOfProductInCart);
+                          HttpServletRequest request,
+                          HttpSession session) {
+        countItemInCart(request);
         session.setAttribute("curent_page", curent_page);
         session.setAttribute("pageSize", pageSize);
         getTableData(curent_page, pageSize, model, request);
@@ -104,10 +97,12 @@ public class Controller {
     @GetMapping("/home/product/detail/addToCart")
     public String test(@RequestParam("id") Long id,
                        @RequestParam("quantity") String quantity,
-                       Model model,
                        RedirectAttributes redirectAttributes,
                        HttpServletRequest request,
-                       HttpSession session) {
+                       HttpSession session
+    ) {
+        countItemInCart(request);
+
         ChiTietSanPham chiTietSp = chiTietSanPhamService.getChiTietSanPhamById(id);
         if (quantity.isBlank()) {
             redirectAttributes.addFlashAttribute("message", "Please enter quantity !");
@@ -131,6 +126,7 @@ public class Controller {
             gioHang.setDonGia(chiTietSp.getGiaBan());
             gioHang.setTrangThai(1);
             if (gioHangService.add(gioHang)) {
+                countItemInCart(request);
                 redirectAttributes.addFlashAttribute("message", "Add success!");
                 return "redirect:/home/product/detail?id=" + chiTietSp.getSanPham().getId();
             }
@@ -172,6 +168,18 @@ public class Controller {
         }
     }
 
+    private void countItemInCart(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Object user = request.getSession().getAttribute("idUser");
+        int numOfProductInCart = 0;
+        if (user == null) {
+            numOfProductInCart = gioHangService.countByTaiKhoan(3L);
+        } else {
+            numOfProductInCart = gioHangService.countByTaiKhoan(Long.valueOf(user.toString()));
+        }
+        session.setAttribute("numOfProductInCart", numOfProductInCart);
+    }
+
     // View Giỏ hàng
     @GetMapping("/home/cart")
     public String viewCart(Model model,
@@ -183,8 +191,10 @@ public class Controller {
     // Xoa gio hang
     @GetMapping("/home/cart/remove")
     public String removeCart(RedirectAttributes redirectAttributes,
+                             HttpServletRequest request,
                              @RequestParam("id") Long id) {
         gioHangService.remove(id);
+        countItemInCart(request);
         return "redirect:/home/cart";
     }
 

@@ -36,14 +36,20 @@ public class UserController {
         // Get user
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         Object maTaiKhoanObject = httpRequest.getSession().getAttribute("maTaiKhoan");
-        String maTaiKhoan = (maTaiKhoanObject != null) ? maTaiKhoanObject.toString() : null;
-        TaiKhoan taiKhoan = taiKhoanService.getTaiKhoanByMa(maTaiKhoan);
         List<HoaDonChiTiet> hoaDonChiTietList;
-        if (trangThai == 0) {
-            hoaDonChiTietList = hoaDonChiTietService.getProductCancelOfUser(taiKhoan.getId());
+        if (maTaiKhoanObject == null) {
+            hoaDonChiTietList = hoaDonChiTietService.findHDCTByAccountIdAndTrangThai(3L, trangThai, trangThai);
         } else {
-            hoaDonChiTietList = hoaDonChiTietService.findHDCTByAccountIdAndTrangThai(taiKhoan.getId(), trangThai, trangThai);
+            String maTaiKhoan = (maTaiKhoanObject != null) ? maTaiKhoanObject.toString() : null;
+            TaiKhoan taiKhoan = taiKhoanService.getTaiKhoanByMa(maTaiKhoan);
+
+            if (trangThai == 0) {
+                hoaDonChiTietList = hoaDonChiTietService.getProductCancelOfUser(taiKhoan.getId());
+            } else {
+                hoaDonChiTietList = hoaDonChiTietService.findHDCTByAccountIdAndTrangThai(taiKhoan.getId(), trangThai, trangThai);
+            }
         }
+
 
         float total = 0;
         for (HoaDonChiTiet chiTiet : hoaDonChiTietList

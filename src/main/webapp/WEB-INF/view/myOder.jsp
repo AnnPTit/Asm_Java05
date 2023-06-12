@@ -107,23 +107,17 @@
                                data-toggle="tooltip" title=""
                                data-original-title="Remove item"><i class="fa fa-trash"></i></a></c:if>
                         <c:if test="${x.trangThai ==4}">
-                            <a class="remove-from-cart" style="cursor: pointer"
+                            <a class="remove-from-cart btn btn-success" style="cursor: pointer"
                                onclick="confirmTakeProduct(${x.hoaDon.id})"
                                data-toggle="tooltip" title=""
-                               data-original-title="Remove item"><i class="fa fa-trash"></i></a></c:if>
+                               data-original-title="Remove item" >Da Nhan Duoc Hang</a></c:if>
                     </td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
     </div>
-    <%--    <div class="shopping-cart-footer">--%>
-    <%--        <div class="column">--%>
-    <%--            <form class="coupon-form" method="post">--%>
-    <%--                <input class="form-control form-control-sm" type="text" placeholder="Coupon code" required="">--%>
-    <%--                <button class="btn btn-outline-primary btn-sm">Apply Coupon</button>--%>
-    <%--            </form>--%>
-    <%--        </div>--%>
+
     <fmt:formatNumber value="${total}" var="formattedTotal"/>
     <div class="column text-lg">Subtotal: <span class="text-medium"><c:out value="${formattedTotal}"/> $</span>
     </div>
@@ -131,10 +125,6 @@
 <div class="shopping-cart-footer">
     <div class="column"><a class="btn btn-outline-secondary" href="/home"><i class="icon-arrow-left"></i>&nbsp;Back to
         Shopping</a></div>
-    <%--        <div class="column"><a class="btn btn-primary">Update Cart</a>--%>
-    <%--            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal"--%>
-    <%--                    onclick="showSelectedItems()">Checkout--%>
-    <%--            </button>--%>
 </div>
 </div>
 </div>
@@ -155,7 +145,7 @@
         if (confirm("This product in bill have ID  : " + item + ", Do you want confirm get this bill?")) {
             window.location.href = "/home/myOder/nhan-don-hang?id=" + item;
         } else {
-            window.location.href = "/home/user/myOder?trangThai=5";
+            window.location.href = "/home/user/myOder?trangThai=4";
         }
     }
 </script>
